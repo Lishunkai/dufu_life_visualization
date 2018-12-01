@@ -1,0 +1,1607 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>杜甫生平可视化</title>
+    <script src="jquery-1.10.2.min.js"></script>
+    <script src="echarts.js"></script>
+	<script src="china.js"></script>
+    <style type="text/css">
+        html, body, #main { height: 100%; width: 100%; margin: 0; padding: 0 }
+    </style>
+</head>
+<body>
+	<div id="qianxi" style="width:1500px; height:750px; float:left;"></div>
+	<div id="fenbu" style="width:1500px; height:750px; float:left;"></div>
+	<div id="graph" style="width:700px; height:650px; float:left;"></div>
+	<div id="main3" style="width:800px; height:650px; float:left;"></div>
+    <script type="text/javascript">
+		var myChartqianxi = echarts.init(document.getElementById('qianxi'));
+        var myChartfenbu = echarts.init(document.getElementById('fenbu'));
+		var myChart = echarts.init(document.getElementById('graph'));
+		var myChart3 = echarts.init(document.getElementById('main3'));
+
+
+var geoCoordMap = {
+    '海门':[121.15,31.89],
+    '鄂尔多斯':[109.781327,39.608266],
+    '招远':[120.38,37.35],
+    '舟山':[122.207216,29.985295],
+    '齐齐哈尔':[123.97,47.33],
+    '盐城':[120.13,33.38],
+    '赤峰':[118.87,42.28],
+    '青岛':[120.33,36.07],
+    '乳山':[121.52,36.89],
+    '金昌':[102.188043,38.520089],
+    '泉州':[118.58,24.93],
+    '莱西':[120.53,36.86],
+    '日照':[119.46,35.42],
+    '胶南':[119.97,35.88],
+    '南通':[121.05,32.08],
+    '拉萨':[91.11,29.97],
+    '云浮':[112.02,22.93],
+    '梅州':[116.1,24.55],
+    '文登':[122.05,37.2],
+    '上海':[121.48,31.22],
+    '攀枝花':[101.718637,26.582347],
+    '威海':[122.1,37.5],
+    '承德':[117.93,40.97],
+    '厦门':[118.1,24.46],
+    '汕尾':[115.375279,22.786211],
+    '潮州':[116.63,23.68],
+    '丹东':[124.37,40.13],
+    '太仓':[121.1,31.45],
+    '曲靖':[103.79,25.51],
+    '烟台':[121.39,37.52],
+    '福州':[119.3,26.08],
+    '瓦房店':[121.979603,39.627114],
+    '即墨':[120.45,36.38],
+    '抚顺':[123.97,41.97],
+    '玉溪':[102.52,24.35],
+    '张家口':[114.87,40.82],
+    '阳泉':[113.57,37.85],
+    '莱州':[119.942327,37.177017],
+    '湖州':[120.1,30.86],
+    '汕头':[116.69,23.39],
+    '昆山':[120.95,31.39],
+    '宁波':[121.56,29.86],
+    '湛江':[110.359377,21.270708],
+    '揭阳':[116.35,23.55],
+    '荣成':[122.41,37.16],
+    '连云港':[119.16,34.59],
+    '葫芦岛':[120.836932,40.711052],
+    '常熟':[120.74,31.64],
+    '东莞':[113.75,23.04],
+    '河源':[114.68,23.73],
+    '淮安':[119.15,33.5],
+    '泰州':[119.9,32.49],
+    '南宁':[108.33,22.84],
+    '营口':[122.18,40.65],
+    '惠州':[114.4,23.09],
+    '江阴':[120.26,31.91],
+    '蓬莱':[120.75,37.8],
+    '韶关':[113.62,24.84],
+    '嘉峪关':[98.289152,39.77313],
+    '广州':[113.23,23.16],
+    '太原':[112.53,37.87],
+    '清远':[113.01,23.7],
+    '中山':[113.38,22.52],
+    '昆明':[102.73,25.04],
+    '寿光':[118.73,36.86],
+    '盘锦':[122.070714,41.119997],
+    '深圳':[114.07,22.62],
+    '珠海':[113.52,22.3],
+    '宿迁':[118.3,33.96],
+	
+	
+	'巩义':[113.05,34.76],
+	'洛阳':[112.44,34.7],
+	'漯河':[113.5,33.4],
+	'临猗':[110.78,35.15],
+	'南京':[118.78,32.04],
+	'苏州':[120.62,31.32],
+	'杭州':[120.19,30.26],
+	'绍兴':[120.58,30.01],
+	'泰安':[117.13,36.18],
+	'兖州':[116.4,35.43],
+	'济南':[117,36.65],
+	'济宁':[116.59,35.38],
+	'开封':[114.35,34.79],
+	'商丘':[115.5,34.61],
+	'西安':[108.95,34.27],
+    '咸阳':[108.72,34.36],
+	'渭南':[109.5,34.52],
+	'延安':[109.47,36.6],
+	'宝鸡':[107.15,34.38],
+	'铜川':[109.11,35.09],
+	'长治':[113.08,36.18],
+	'三门峡':[111.19,34.76],
+	'天水':[105.1,34.68],
+	'陇南':[104.92,33.4],
+	'广元':[105.51,32.50],
+    '德阳':[104.37,31.13],
+	'成都':[104.06,30.67],
+	'绵阳':[104.73,31.48],
+	'阆中':[106.0,31.55],
+	'宜宾':[104.56,29.77],
+	'重庆':[106.54,29.59],
+    '宜昌':[111.3,30.7],
+	'荆州':[112.239741,30.335165],
+	'岳阳':[113.09,29.37],
+	'长沙':[113,28.21],
+	'湘潭':[112.91,27.87],
+	'株洲':[113.16,27.83],
+	'衡阳':[112.39,26.98],
+	'株洲':[113.16,27.83],
+	  
+	
+	'德州':[116.29,37.45],
+    '平度':[119.97,36.77],
+    '佛山':[113.11,23.05],
+    '海口':[110.35,20.02],
+    '江门':[113.06,22.61],
+    '章丘':[117.53,36.72],
+    '肇庆':[112.44,23.05],
+    '大连':[121.62,38.92],
+    '临汾':[111.5,36.08],
+    '吴江':[120.63,31.16],
+    '石嘴山':[106.39,39.04],
+    '沈阳':[123.38,41.8],
+    '茂名':[110.88,21.68],
+    '嘉兴':[120.76,30.77],
+    '长春':[125.35,43.88],
+    '胶州':[120.03336,36.264622],
+    '银川':[106.27,38.47],
+    '张家港':[120.555821,31.875428],
+    '锦州':[121.15,41.13],
+    '南昌':[115.89,28.68],
+    '柳州':[109.4,24.33],
+    '三亚':[109.511909,18.252847],
+    '吉林':[126.57,43.87],
+    '阳江':[111.95,21.85],
+    '西宁':[101.74,36.56],
+    '呼和浩特':[111.65,40.82],
+    '大同':[113.3,40.12],
+    '镇江':[119.44,32.2],
+    '桂林':[110.28,25.29],
+    '张家界':[110.479191,29.117096],
+    '宜兴':[119.82,31.36],
+    '北海':[109.12,21.49],
+    '金坛':[119.56,31.74],
+    '东营':[118.49,37.46],
+    '牡丹江':[129.58,44.6],
+    '遵义':[106.9,27.7],
+    '扬州':[119.42,32.39],
+    '常州':[119.95,31.79],
+    '潍坊':[119.1,36.62],
+    '台州':[121.420757,28.656386],
+    '滨州':[118.03,37.36],
+    '贵阳':[106.71,26.57],
+    '无锡':[120.29,31.59],
+    '本溪':[123.73,41.3],
+    '克拉玛依':[84.77,45.59],
+    '马鞍山':[118.48,31.56],
+    '焦作':[113.21,35.24],
+    '句容':[119.16,31.95],
+    '北京':[116.46,39.92],
+    '徐州':[117.2,34.26],
+    '衡水':[115.72,37.72],
+    '包头':[110,40.58],
+    '乌鲁木齐':[87.68,43.77],
+    '枣庄':[117.57,34.86],
+    '淄博':[118.05,36.78],
+    '鞍山':[122.85,41.12],
+    '溧阳':[119.48,31.43],
+    '库尔勒':[86.06,41.68],
+    '安阳':[114.35,36.1],
+    '温州':[120.65,28.01],
+    '九江':[115.97,29.71],
+    '邯郸':[114.47,36.6],
+    '临安':[119.72,30.23],
+    '兰州':[103.73,36.03],
+    '沧州':[116.83,38.33],
+    '临沂':[118.35,35.05],
+    '南充':[106.110698,30.837793],
+    '天津':[117.2,39.13],
+    '富阳':[119.95,30.07],
+    '诸暨':[120.23,29.71],
+    '哈尔滨':[126.63,45.75],
+    '聊城':[115.97,36.45],
+    '芜湖':[118.38,31.33],
+    '唐山':[118.02,39.63],
+    '平顶山':[113.29,33.75],
+    '邢台':[114.48,37.05],
+    '义乌':[120.06,29.32],
+    '丽水':[119.92,28.45],
+    '秦皇岛':[119.57,39.95],
+    '石家庄':[114.48,38.03],
+    '莱芜':[117.67,36.19],
+    '常德':[111.69,29.05],
+    '保定':[115.48,38.85],
+    '金华':[119.64,29.12],
+    '衢州':[118.88,28.97],
+    '廊坊':[116.7,39.53],
+    '菏泽':[115.480656,35.23375],
+    '合肥':[117.27,31.86],
+    '武汉':[114.31,30.52],
+    '大庆':[125.03,46.58]
+};
+
+var provincedata = [
+		{name: "巩义",value: 1},
+		{name: "洛阳",value: 14},
+		{name: "漯河",value: 2},
+		{name: "临猗",value: 1},
+		{name: "南京",value: 1},
+		{name: "苏州",value: 1},
+		{name: "杭州",value: 3},
+		{name: "绍兴",value: 3},
+		{name: "泰安",value: 1},
+		{name: "兖州",value: 4},
+		{name: "济南",value: 3},
+		{name: "济宁",value: 1},
+		{name: "开封",value: 1},
+		
+		{name: "商丘",value: 1},
+		{name: "西安",value: 11},
+		{name: "咸阳",value: 4},
+		{name: "渭南",value: 9},
+		{name: "延安",value: 4},
+		{name: "宝鸡",value: 2},
+		{name: "铜川",value: 1},
+		{name: "长治",value: 1},
+		{name: "三门峡",value: 2},
+		{name: "天水",value: 1},
+		{name: "陇南",value: 2},
+		{name: "广元",value: 1},
+		{name: "德阳",value: 2},
+		
+		{name: "成都",value: 4},
+		{name: "绵阳",value: 5},
+		{name: "阆中",value: 1},
+		{name: "宜宾",value: 1},
+		{name: "重庆",value: 5},
+		{name: "宜昌",value: 1},
+		{name: "荆州",value: 1},
+		{name: "岳阳",value: 2},
+		{name: "长沙",value: 4},
+		{name: "湘潭",value: 1},
+		{name: "衡阳",value: 2},
+		{name: "株洲",value: 1}
+];
+
+var convertData = function(data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var geoCoord = geoCoordMap[data[i].name];
+                if (geoCoord) {
+                    res.push({
+                        name: data[i].name,
+                        value: geoCoord.concat(data[i].value)
+                    });
+                }
+            }
+            return res;
+        };
+
+        var convertedData = [
+        convertData(provincedata),
+        convertData(provincedata.sort(function(a, b) {
+            return b.value - a.value;
+        }).slice(0, 6))
+        ];
+        provincedata.sort(function(a,b){
+         return    a.value-b.value;
+     })
+
+        var selectedItems = [];
+        var categoryData = [];
+        var barData = [];
+        var sum = 0;
+        var count = provincedata.length;
+        for(var i=0;i<provincedata.length;i++){
+            categoryData.push(provincedata[i].name);
+            barData.push(provincedata[i].value);
+            sum+=provincedata[i].value;
+        }
+        console.log(categoryData);
+        console.log(sum+"   "+count)
+
+var qianxiconvertData = function (data) {
+                var res = [];
+                for (var i = 0; i < data.length; i++) {
+                    var dataItem = data[i];
+                    var fromCoord = geoCoordMap[dataItem[0].name];
+                    var toCoord = geoCoordMap[dataItem[1].name];
+                    if (fromCoord && toCoord) {
+                        res.push({
+                            fromName: dataItem[0].name,
+                            toName: dataItem[1].name,
+                            coords: [fromCoord, toCoord]
+                        });
+                    }
+                }
+                return res;
+            };
+		
+		
+		
+		
+// 读书和漫游时期
+            var DSMY = [
+                [{name: '巩义', value:1},{name: '洛阳',value:1}],
+                [{name: '洛阳', value:1},{name: '漯河',value:1}],
+                [{name: '漯河', value:1},{name: '洛阳',value:1}],
+                [{name: '洛阳', value:1},{name: '漯河',value:1}],
+                [{name: '漯河', value:1},{name: '临猗',value:1}],
+                [{name: '临猗', value:1},{name: '南京',value:1}],
+                [{name: '南京', value:1},{name: '苏州',value:1}],
+                [{name: '苏州', value:1},{name: '杭州',value:1}],
+				[{name: '杭州', value:1},{name: '绍兴',value:1}],
+				[{name: '绍兴', value:1},{name: '杭州',value:1}],
+				[{name: '杭州', value:1},{name: '绍兴',value:1}],
+				[{name: '绍兴', value:1},{name: '杭州',value:1}],
+				[{name: '杭州', value:1},{name: '洛阳',value:1}],
+				[{name: '洛阳', value:1},{name: '泰安',value:1}],
+				[{name: '泰安', value:1},{name: '兖州',value:1}],
+				[{name: '兖州', value:1},{name: '济南',value:1}],
+				[{name: '济南', value:1},{name: '兖州',value:1}],
+				[{name: '兖州', value:1},{name: '济宁',value:1}],
+				[{name: '济宁', value:1},{name: '洛阳',value:1}],
+				[{name: '洛阳', value:1},{name: '开封',value:1}],
+				[{name: '开封', value:1},{name: '洛阳',value:1}],
+				[{name: '洛阳', value:1},{name: '商丘',value:1}],
+				[{name: '商丘', value:1},{name: '洛阳',value:1}],
+				[{name: '洛阳', value:1},{name: '济南',value:1}],
+				[{name: '济南', value:1},{name: '兖州',value:1}],
+				[{name: '兖州', value:1},{name: '洛阳',value:1}],				
+                [{name: '洛阳', value:1},{name: '西安',value:1}]
+            ];
+
+			// 困居长安时期
+            var KJCA = [
+                [{name: '西安', value:1},{name: '咸阳',value:1}],
+                [{name: '咸阳', value:1},{name: '西安',value:1}],
+                [{name: '西安', value:1},{name: '洛阳',value:1}],
+                [{name: '洛阳', value:1},{name: '西安',value:1}],
+				[{name: '西安', value:1},{name: '洛阳',value:1}],
+				[{name: '洛阳', value:1},{name: '咸阳',value:1}],
+				[{name: '咸阳', value:1},{name: '西安',value:1}],
+				[{name: '西安', value:1},{name: '渭南',value:1}],
+				[{name: '渭南', value:1},{name: '西安',value:1}],
+				[{name: '西安', value:1},{name: '渭南',value:1}],
+				[{name: '渭南', value:1},{name: '西安',value:1}],
+				[{name: '西安', value:1},{name: '延安',value:1}],
+				[{name: '延安', value:1},{name: '西安',value:1}],
+				[{name: '西安', value:1},{name: '延安',value:1}]
+            ];
+			
+			// 陷贼和为官时期
+            var XZHWG = [
+                [{name: '延安', value:1},{name: '西安',value:1}],
+                [{name: '西安', value:1},{name: '宝鸡',value:1}],
+                [{name: '宝鸡',value:1},{name: '咸阳',value:1}],
+                [{name: '咸阳', value:1},{name: '铜川',value:1}],
+				[{name: '铜川', value:1},{name: '延安',value:1}],
+				[{name: '延安', value:1},{name: '渭南',value:1}],
+				[{name: '渭南', value:1},{name: '西安',value:1}],
+				[{name: '西安', value:1},{name: '宝鸡',value:1}],
+				[{name: '宝鸡', value:1},{name: '渭南',value:1}],
+				[{name: '渭南', value:1},{name: '西安',value:1}],
+				[{name: '西安', value:1},{name: '长治',value:1}],
+				[{name: '长治', value:1},{name: '三门峡',value:1}],
+				[{name: '三门峡', value:1},{name: '西安',value:1}],
+				[{name: '西安', value:1},{name: '洛阳',value:1}],
+				[{name: '洛阳', value:1},{name: '三门峡',value:1}],
+				[{name: '三门峡', value:1},{name: '渭南',value:1}],
+				[{name: '渭南', value:1},{name: '天水',value:1}]
+            ];
+			
+			// 西南漂泊时期
+            var XNPB = [
+                [{name: '天水', value:1},{name: '陇南',value:1}],
+                [{name: '陇南',value:1},{name: '广元',value:1}],
+                [{name: '广元',value:1},{name: '德阳',value:1}],
+                [{name: '德阳',value:1},{name: '成都',value:1}],
+                [{name: '成都',value:1},{name: '绵阳',value:1}],
+                [{name: '绵阳',value:1},{name: '阆中',value:1}],
+                [{name: '阆中',value:1},{name: '成都',value:1}],
+				[{name: '成都', value:1},{name: '宜宾',value:1}],
+				[{name: '宜宾', value:1},{name: '重庆',value:1}],
+				[{name: '重庆', value:1},{name: '宜昌',value:1}],
+				[{name: '宜昌', value:1},{name: '荆州',value:1}]
+            ];
+			
+			// 晚年生活时期
+            var WNSH = [
+                [{name: '荆州', value:1},{name: '岳阳',value:1}],
+                [{name: '岳阳',value:1},{name: '长沙',value:1}],
+				[{name: '长沙', value:1},{name: '湘潭',value:1}],
+				[{name: '湘潭', value:1},{name: '株洲',value:1}],
+				[{name: '株洲', value:1},{name: '衡阳',value:1}],
+				[{name: '衡阳', value:1},{name: '长沙',value:1}],
+				[{name: '长沙', value:1},{name: '衡阳',value:1}]
+            ];
+
+
+var qianxicolor = ['yellow', '#FF4500', 'rgba(255,102,204,1)', 'rgba(51,255,51,1)', '#00FFFF'];
+
+var qianxiseries = [
+					{
+                        name: '停留次数',
+                        type: 'map',
+                        mapType: 'china',
+						zoom: 0.5,
+						left: '59%',
+						y: '38%',
+                        roam: false,
+                        label: {
+                            normal: {
+                                show: false
+                            },
+                            emphasis: {
+                                show: true
+                            }
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{a}<br/>" + "{b}: {c}次"
+                        },
+                        showLegendSymbol: false,
+                        
+						// 停留次数，以省份计
+						data:[
+                            {name: '北京',value:0 },
+                            {name: '天津',value:0 },
+                            {name: '上海',value:0 },
+                            {name: '重庆',value:5 },
+                            {name: '河北',value:0 },
+                            {name: '河南',value:21 },
+                            {name: '云南',value:0 },
+                            {name: '辽宁',value:0 },
+                            {name: '黑龙江',value:0 },
+                            {name: '湖南',value:10 },
+                            {name: '安徽',value:0 },
+                            {name: '山东',value:9 },
+                            {name: '新疆',value:0 },
+                            {name: '江苏',value:2 },
+                            {name: '浙江',value:6 },
+                            {name: '江西',value:0 },
+                            {name: '湖北',value:2 },
+                            {name: '广西',value:0 },
+                            {name: '甘肃',value:4 },
+                            {name: '山西',value:2 },
+                            {name: '内蒙古',value:0 },
+                            {name: '陕西',value:32 },
+                            {name: '吉林',value:0 },
+                            {name: '福建',value:0 },
+                            {name: '贵州',value:0 },
+                            {name: '广东',value:0 },
+                            {name: '青海',value:0 },
+                            {name: '西藏',value:0 },
+                            {name: '四川',value:13 },
+                            {name: '宁夏',value:0 },
+                            {name: '海南',value:0 },
+                            {name: '台湾',value:0 },
+                            {name: '香港',value:0 },
+                            {name: '澳门',value:0 }
+                        ]
+					}];
+
+            [
+				['读书和漫游      0-34岁', DSMY],
+				['困居长安        34-45岁', KJCA],
+				['陷贼和为官      45-48岁', XZHWG],
+				['西南漂泊        48-56岁', XNPB],
+				['晚年生活        56-58岁', WNSH]
+			].forEach(function (item, i) // 循环
+			{
+                qianxiseries.push(
+				{
+                    name: item[0],
+                    type: 'lines',
+                    zlevel: 1,
+                    effect: {  // 荧光特效
+                        show: true,
+                        period: 7, // 速度(周期)
+                        trailLength: 0.8,
+                        color: '#fff',
+                        symbolSize: 2, // 荧光大小
+						shadowBlur: 5 // 晕影大小
+                    },
+                    lineStyle: {
+                        normal: {
+                            color: qianxicolor[i],
+                            width: 0, // 曲线的线宽
+                            curveness: 0.2 // 曲线的弯曲程度
+                        }
+                    },
+                    data: qianxiconvertData(item[1])
+                },
+                
+				{
+                    name: item[0],
+                    type: 'lines',
+                    zlevel: 2, // 在z轴上的坐标为2，即它是第2图层
+                    symbol: ['none', 'arrow'],
+                    symbolSize: 0, // 静止箭头的大小
+                    effect:
+					{
+                        show: true,
+                        period: 7,
+                        trailLength: 0,
+                        symbol: 'arrow',
+                        symbolSize: 4 // 运动箭头的大小
+                    },
+                    
+					lineStyle:
+					{
+                        normal: {
+                            color: qianxicolor[i],
+                            width: 1,
+                            opacity: 0.9,
+                            curveness: 0.2
+                        },
+                        emphasis: { // 当鼠标停在上面时的情况
+                            color: qianxicolor[i],
+                            width: 5,
+                            opacity: 1,
+                            curveness: 0.2
+                        }
+                    },
+                    data: qianxiconvertData(item[1])
+                },
+                {
+                    name: item[0],
+                    type: 'effectScatter',
+					
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+					showEffectOn: 'emphasis',
+					//rippleEffect: {brushType: 'stroke'},
+					//hoverAnimation: true,
+					
+					
+					// 显示地名
+                    label:
+					{
+                        normal:
+						{
+                            show: true, // 显示纬度
+							position: 'right',
+							formatter: '{b}',
+							color: '#ddd'
+                        },
+                        emphasis:
+						{
+                            show: true,
+                            position: 'right',
+                            formatter: '{b}'
+                        }
+                    },
+                    symbolSize: 5,  // 坐标点的大小
+                    
+					
+					// 圆圈中心
+					itemStyle:
+					{
+                        normal:
+						{
+							color: 'red'
+                        },
+                        emphasis: {
+							color: 'red'
+                        }
+                    },
+					
+					// 每个地点的名字
+                    data: item[1].map(function (dataItem) {
+                        return {
+                            name: dataItem[0].name,
+                            value: geoCoordMap[dataItem[0].name].concat([dataItem[0].value]).concat(geoCoordMap[dataItem[1].name]).concat([dataItem[1].value])
+                        };
+                    }
+					)
+                }
+                );
+            });
+
+            // 指定图表的配置项和数据
+var optionqianxi = {
+				backgroundColor: '#404a59',
+                title: {
+                    top: '5%',
+                    text: '杜甫一生的迁徙轨迹',
+                    // subtext: '及中共委员出生地信息',
+                    left: '5%',
+					textStyle: {color: '#eee', fontSize: 20}
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend:
+				[
+				{
+                    orient: 'vertical',
+                    left: '85%',
+                    top: '5%',
+                    data:
+					[
+						'读书和漫游      0-34岁',
+						'困居长安        34-45岁',
+						'陷贼和为官      45-48岁', 
+						'西南漂泊        48-56岁',
+						'晚年生活        56-58岁'],
+                    selectedMode: 'multiple',
+					textStyle: {color: '#eee'}
+                },
+				{
+                    orient: 'vertical',
+                    left: '85%',
+                    top:'26%',
+                    data:['停留次数'],
+                    selectedMode: 'multiple',
+					textStyle: {color: '#eee'}
+                }
+                ],
+				
+				// 右下角的color bar
+                visualMap: {
+                    min: 0,
+                    max: 32,
+                    left: '85%',
+                    top: '33%',
+                    // text: ['高','低'],           // 文本，默认为数值文本
+                    calculable: true,
+					textStyle: {color: '#fff'},
+                    inRange: {
+                        color: ['#ebcadd','#bb076c']
+                    }
+                },
+				
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    left: 'right',
+                    top: 'center',
+                    feature: {
+                        dataView: {readOnly: false},
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+
+				
+				geo: 
+				{
+                map: 'china',
+                left: '10%',
+                right: '10%',
+                center: [115.98561551896913, 32.205000490896193],
+                zoom: 2.6,
+                label: {
+                    emphasis: {
+                        show: true
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#1b1b1b',//'#2a333d',
+                        borderColor: 'rgba(30,144,255,0.7)'
+                    },
+                    emphasis: {
+                        areaColor: '#2a333d'
+                    }
+				}
+			},
+                series: qianxiseries
+                
+            };	
+
+		
+optionfenbu = {
+            backgroundColor: '#404a59',
+            animation: true,
+            animationDuration: 1000,
+            animationEasing: 'cubicInOut',
+            animationDurationUpdate: 1000,
+            animationEasingUpdate: 'cubicInOut',
+            title: [{
+                text: '杜甫一生去过的地方',
+                subtext: '圆越大表示去过的次数越多',
+                left: 'center',
+				top:'4%',
+                textStyle: {
+                    color: '#fff',
+					fontSize: 20
+                }
+            }, {
+                id: 'statistic',
+                text: '去过的次数',
+                right: '15%',
+                top: '7%',
+                textStyle: {
+                    color: '#fff',
+                    fontSize: 16
+                }
+            }],
+            toolbox: {
+                iconStyle: {
+                    normal: {
+                        borderColor: '#fff'
+                    },
+                    emphasis: {
+                        borderColor: '#b1e4ff'
+                    }
+                },
+                feature: {
+                    dataZoom: {},
+                    brush: {
+                        type: ['rect', 'polygon', 'clear']
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+                }
+            },
+            brush: {
+                outOfBrush: {
+                    color: '#abc'
+                },
+                brushStyle: {
+                    borderWidth: 2,
+                    color: 'rgba(0,0,0,0.2)',
+                    borderColor: 'rgba(0,0,0,0.5)',
+                },
+                seriesIndex: [0, 1],
+                throttleType: 'debounce',
+                throttleDelay: 300,
+                geoIndex: 0
+            },
+            geo: {
+                map: 'china',
+                left: '10',
+                right: '35%',
+                center: [112.98561551896913, 32.205000490896193],
+                zoom: 2.5,
+                label: {
+                    emphasis: {
+                        show: true
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#323c48',
+                        borderColor: '#111'
+                    },
+                    emphasis: {
+                        areaColor: '#2a333d'
+                    }
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            grid: {
+                right: 40,
+                top: 100,
+                bottom: 40,
+                width: '30%'
+            },
+            xAxis: {
+                type: 'value',
+                scale: true,
+                position: 'top',
+                boundaryGap: false,
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    show: true
+                },
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    margin: 2,
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+            },
+            yAxis: {
+                type: 'category',
+        nameGap: 16,
+        axisLine: {
+            show: true,
+            lineStyle: {
+                color: '#ddd'
+            }
+        },
+        axisTick: {
+            show: false,
+            lineStyle: {
+                color: '#ddd'
+            }
+        },
+        axisLabel: {
+            interval: 0,
+            textStyle: {
+                color: '#ddd'
+            }
+        },
+        data: categoryData
+    },
+    series: [
+	{
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        data: convertedData[0],
+        symbolSize: function(val) {
+            //return Math.max(val[2] / 10, 8);
+            return Math.max(val[2] * 4 , 10);
+        },
+        label: {
+            normal: {
+                formatter: '{b}',
+                position: 'right',
+                show: false
+            },
+            emphasis: {
+                show: true
+            }
+        },
+        itemStyle: {
+            normal: {
+                color: '#ddb926',
+                position: 'right',
+                show: true
+            }
+        }
+    },
+	{
+        type: 'effectScatter',
+        coordinateSystem: 'geo',
+        data: convertedData[0],
+		// 黄色坐标点的大小
+        symbolSize: function(val) {
+            return Math.max(val[2] / 10, 5);
+        },
+        showEffectOn: 'emphasis',
+        rippleEffect:
+		{
+            brushType: 'stroke'
+        },
+        hoverAnimation: true,
+        
+		// 显示地名
+		label: {
+            normal: {
+                formatter: '{b}',
+                position: 'right',
+                show: true,
+				color:'#ddd',
+            }
+        },
+		
+		// 圆圈中心
+        itemStyle: {
+            normal: {
+                color: '#f4e925',
+                shadowBlur: 1,
+                shadowColor: '#333'
+            }
+        },
+        zlevel: 1
+    },
+	
+	// 右侧bar的颜色
+	{
+        id: 'bar',
+        zlevel: 2,
+        type: 'bar',
+        symbol: 'none',
+        itemStyle: {
+            normal: {
+                color: '#ddb926'
+            }
+        },
+
+        data: provincedata
+    }]
+};
+
+function renderBrushed(params) {
+    var mainSeries = params.batch[0].selected[0];
+
+    var selectedItems = [];
+    var categoryData = [];
+    var barData = [];
+    var maxBar = 30;
+    var sum = 0;
+    var count = 0;
+
+    for (var i = 0; i < mainSeries.dataIndex.length; i++) {
+        var rawIndex = mainSeries.dataIndex[i];
+        var dataItem = convertedData[0][rawIndex];
+        var pmValue = dataItem.value[2];
+
+        sum += pmValue;
+        count++;
+
+        selectedItems.push(dataItem);
+    }
+
+    selectedItems.sort(function (a, b) {
+        //   return b.value[2] - a.value[2];
+        return a.value-b.value;
+    });
+
+    for (var i = 0; i < Math.min(selectedItems.length, maxBar); i++) {
+        categoryData.push(selectedItems[i].name);
+        barData.push(selectedItems[i].value[2]);
+    };
+}
+
+
+var nodes = [
+                        {
+                            name: '杜甫',
+                            itemStyle: {
+                                normal: {
+                                    //color: '#fec42c'
+									color: 'rgba(255,47,47,1)'
+                                }
+                            }
+                        },
+						{
+                            name: '李白',
+                            itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)'
+                                }
+                            }
+                        },
+						{
+                            name: '高适',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)'
+                                }
+                            }
+                        },
+						{
+                            name: '张旭',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(204,255,102,1)'
+                                }
+                            }
+                        },
+						{
+                            name: '严武',
+                            itemStyle: {
+                                normal: {
+                                    color: 'rgba(204,255,102,1)'
+                                }
+                            }
+                        },
+						{
+                            name: '薛稷',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(204,255,102,1)'
+                                }
+                            }
+                        },
+						{
+                            name: '孟浩然',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)'
+                                }
+                            }
+                        },
+						{
+                            name: '王昌龄',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)'
+                                }
+                            }
+                        },
+						{
+                            name: '钱起',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        },
+						{
+                            name: '王维',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        },
+						{
+                            name: '岑参',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        },
+						{
+                            name: '李隆基',
+							itemStyle: {
+                                normal: {
+                                    color: '#fec42c',
+                                }
+                            }
+                        },
+						{
+                            name: '贺知章',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        },
+						{
+                            name: '李嘉佑',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        },
+						{
+                            name: '储光义',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        },
+						{
+                            name: '刘长卿',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        },
+						{
+                            name: '皇埔冉',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        },
+						{
+                            name: '张继',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        },
+						{
+                            name: '刘方平',
+							itemStyle: {
+                                normal: {
+                                    color: 'rgba(121,220,255,1)',
+                                }
+                            }
+                        }
+                    ];	
+
+option = {
+			backgroundColor: '#323c48',
+            title:[
+			{
+				text: '杜甫与唐代名人的关系可视化',
+				top:'2%',
+				x:'center',
+				textStyle:{color: '#eee', fontSize:20}
+			},
+			{
+				text: '红色: 杜甫',
+				top:'8%',
+				x:'5%',
+				textStyle:{color: 'rgba(255,47,47,1)', fontSize:14}
+			},
+			{
+				text: '橙色: 皇帝',
+				top:'12%',
+				x:'5%',
+				textStyle:{color: '#fec42c', fontSize:14}
+			},
+			{
+				text: '蓝色: 诗人',
+				top:'16%',
+				x:'5%',
+				textStyle:{color: 'rgba(121,220,255,1)', fontSize:14}
+			},
+			{
+				text: '绿色: 画家、书法家',
+				top:'20%',
+				x:'5%',
+				textStyle:{color: 'rgba(204,255,102,1)', fontSize:14}
+			},
+			{
+				text: '*连线表示两者的合作关系，合作越密切线条越宽',
+				top:'93%',
+				x:'5%',
+				textStyle:{color:'#eee', fontSize:14}
+			}
+			],
+            series: [
+                {
+                    type: 'graph',
+                    layout: 'force', <!-- layout可以选择none、circular和force 'none' 不采用任何布局，使用节点中提供的 x， y 作为节点的位置。 'circular' 采用环形布局。'force' 采用力引导布局。-->
+                    symbolSize: 40, // 圆的统一大小
+                    roam: true,
+                    edgeSymbol: ['circle', 'arrow'],
+                    edgeSymbolSize: [1, 5],
+                    edgeLabel: {
+                        normal: {
+                            textStyle:
+							{
+                                fontSize: 10
+                            }
+                        }
+                    },
+                    force:
+					{
+                        repulsion: 800,
+                        edgeLength: [20, 50], //边的两个节点之间的距离，这个距离也会受 repulsion。[10, 50] 。值越小则长度越长
+						gravity : 0.2 //节点受到的向中心的引力因子。该值越大节点越往中心点靠拢。
+                    },
+                    draggable: true,
+                    itemStyle:
+					{
+                        normal:
+						{
+                            color: '#4b565b'
+                        }
+                    },
+                    lineStyle:
+					{
+                        normal:
+						{
+                            width: 1,
+                            color: '#4b565b'
+                        }
+                    },
+                    edgeLabel: {
+                        normal: {
+                            show: false,
+                            formatter: function (x) {
+                                return x.data.name;
+                            }
+                        }
+                    },
+                    label:
+					{
+                        normal:
+						{
+                            show: true,
+                            textStyle:
+							{
+								color: '#000'
+                            }
+                        }
+                    },
+                    data:nodes,
+                    links: [
+						{
+                            source: '杜甫',
+                            target: '高适',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(255,204,102,1)',
+									width: 4
+                                }
+                            }
+                        },
+						{
+                            source: '杜甫',
+                            target: '李白',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(255,204,102,1)',
+									width: 4
+                                }
+                            }
+                        },
+						{
+                            source: '杜甫',
+                            target: '严武',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(102,255,255,1)',
+									width: 2
+                                }
+                            }
+                        },
+						{
+                            source: '杜甫',
+                            target: '岑参',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(102,255,255,1)',
+									width: 2
+                                }
+                            }
+                        },
+						{
+                            source: '杜甫',
+                            target: '薛稷',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '杜甫',
+                            target: '李隆基',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '杜甫',
+                            target: '张旭',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(102,255,255,1)',
+									width: 2
+                                }
+                            }
+                        },
+						{
+                            source: '杜甫',
+                            target: '王昌龄',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '李白',
+                            target: '张旭',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(102,255,255,1)',
+									width: 2
+                                }
+                            }
+                        },
+						{
+                            source: '李白',
+                            target: '李隆基',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '李白',
+                            target: '贺知章',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '李白',
+                            target: '王昌龄',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(102,255,255,1)',
+									width: 2
+                                }
+                            }
+                        },
+						{
+                            source: '王昌龄',
+                            target: '高适',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(255,204,102,1)',
+									width: 4
+                                }
+                            }
+                        },
+						{
+                            source: '王昌龄',
+                            target: '钱起',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '王昌龄',
+                            target: '王维',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(255,204,102,1)',
+									width: 4
+                                }
+                            }
+                        },
+						{
+                            source: '王昌龄',
+                            target: '岑参',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '王维',
+                            target: '储光义',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(102,255,255,1)',
+									width: 2
+                                }
+                            }
+                        },
+						{
+                            source: '王维',
+                            target: '孟浩然',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '王维',
+                            target: '钱起',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(255,204,102,1)',
+									width: 4
+                                }
+                            }
+                        },
+						{
+                            source: '高适',
+                            target: '孟浩然',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '岑参',
+                            target: '李嘉佑',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: '#fff',
+									width: 1
+                                }
+                            }
+                        },
+						{
+                            source: '李嘉佑',
+                            target: '刘长卿',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(255,204,102,1)',
+									width: 4
+                                }
+                            }
+                        },
+						{
+                            source: '李嘉佑',
+                            target: '皇埔冉',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(102,255,255,1)',
+									width: 2
+                                }
+                            }
+                        },
+						{
+                            source: '刘长卿',
+                            target: '皇埔冉',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(255,204,102,1)',
+									width: 4
+                                }
+                            }
+                        },
+						{
+                            source: '刘长卿',
+                            target: '刘方平',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(102,255,255,1)',
+									width: 2
+                                }
+                            }
+                        },
+						{
+                            source: '皇埔冉',
+                            target: '张继',
+							symbolSize: '0',
+							lineStyle: {
+                                normal: {
+                                    type: 'solid',
+                                    color: 'rgba(255,204,102,1)',
+									width: 4
+                                }
+                            }
+                        }
+					]
+                }
+            ]
+        };
+
+
+option3 = {
+	backgroundColor: '#323c48',
+    title:{
+        text: '杜甫诗中高频出现的词',
+        x:'center',
+		top:'2%',
+		textStyle:{color: '#eee', fontSize:20}
+    },
+    tooltip : {
+        trigger: 'axis',
+        axisPointer : {
+            type: 'shadow'
+        }
+    },
+	
+	// 右侧的工具箱
+    toolbox: {
+        show : true,
+        orient : 'vertical',
+        y : 'center',
+        feature : {
+            mark : {show: true},
+            magicType : {show: true, type: ['line', 'bar']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type : 'category',
+            data : ['老','客','归','空','愁','独','难','病','悲','衰','苦',
+					'哀','泪','伤','孤','万里','乾坤','天下','老夫','干戈',
+					'老翁','落日','艰难','白头'],
+			axisLabel:
+			{	
+				interval: 0,  // 设置为0强制显示所有标签，如果设置为1，表示隔一个标签显示一个标签
+				// rotate:90,  // 文字旋转角度
+				// 竖着显示，每个字换一行
+				formatter:function(value)
+                {
+					return value.split("").join("\n");
+				},
+                show: true,
+                textStyle: {
+                    color: '#eee'
+                }
+            }
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            splitArea : {show : true},
+			axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#eee'
+                            }
+                        }
+        }
+    ],
+    grid:
+	{
+        x2:40,
+		containLabel:true
+    },
+    series : 
+    {
+            name:'出现次数',
+            type:'bar',
+			barWidth: 12,//柱图宽度
+			itemStyle:{normal:{color:'#fec42c'}},
+            data:[378,317,307,203,180,179,177,162,130,130,128,111,104,103,100,
+				  70,44,29,27,25,24,24,22,18]
+    }
+    
+};
+	
+		myChartqianxi.setOption(optionqianxi);
+		myChartfenbu.setOption(optionfenbu);
+		myChart.setOption(option);
+		myChart3.setOption(option3);
+    </script>
+</body>
+</html>
